@@ -1,16 +1,37 @@
 Dependencies for Project 'Template', Target 'JoystickRGB': (DO NOT MODIFY !)
-F (.\startup_LPC11xx.s)(0x56008A8A)(--cpu Cortex-M0 --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\CMSIS\Include-I C:\Keil_v5\ARM\Inc\NXP\LPC11xx--pd "__UVISION_VERSION SETA 516"--list .\startup_lpc11xx.lst --xref -o .\startup_lpc11xx.o --depend .\startup_lpc11xx.d)
-F (.\system_LPC11xx.c)(0x56008A8A)(-c --cpu Cortex-M0 -D__EVAL -g -O0 --apcs=interwork -I..\Template -I.\include-I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\CMSIS\Include-I C:\Keil_v5\ARM\Inc\NXP\LPC11xx-D__UVISION_VERSION="516"-o .\system_lpc11xx.o --omf_browse .\system_lpc11xx.crf --depend .\system_lpc11xx.d)
+F (.\startup_LPC11xx.s)(0x564D459A)(--cpu Cortex-M0 --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\CMSIS\Include-I C:\Keil_v5\ARM\Inc\NXP\LPC11xx--pd "__UVISION_VERSION SETA 516"--list .\startup_lpc11xx.lst --xref -o .\startup_lpc11xx.o --depend .\startup_lpc11xx.d)
+F (.\system_LPC11xx.c)(0x564D459A)(-c --cpu Cortex-M0 -D__EVAL -g -O0 --apcs=interwork -I..\Template -I.\include-I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\CMSIS\Include-I C:\Keil_v5\ARM\Inc\NXP\LPC11xx-D__UVISION_VERSION="516"-o .\system_lpc11xx.o --omf_browse .\system_lpc11xx.crf --depend .\system_lpc11xx.d)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x55AFBAD2)
-I (LPC11xx.h)(0x56008A8A)
-I (C:\Keil_v5\ARM\CMSIS\Include\core_cm0.h)(0x559DB078)
-I (C:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h)(0x559DB078)
-I (C:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h)(0x559DB078)
-I (C:\Keil_v5\ARM\Inc\NXP\LPC11xx\system_LPC11xx.h)(0x559DA688)
-F (.\src\main.c)(0x56457C12)(-c --cpu Cortex-M0 -D__EVAL -g -O0 --apcs=interwork -I..\Template -I.\include-I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\CMSIS\Include-I C:\Keil_v5\ARM\Inc\NXP\LPC11xx-D__UVISION_VERSION="516"-o .\main.o --omf_browse .\main.crf --depend .\main.d)
-I (C:\Keil_v5\ARM\Inc\NXP\LPC11xx\LPC11xx.h)(0x559DA688)
-I (C:\Keil_v5\ARM\CMSIS\Include\core_cm0.h)(0x559DB078)
+I (LPC11xx.h)(0x564D459A)
+I (C:\Keil_v5\ARM\CMSIS\Include\core_cm0.h)(0x5320840A)
+I (C:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h)(0x5320840A)
+I (C:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h)(0x5320840A)
+I (C:\Keil_v5\ARM\Inc\NXP\LPC11xx\system_LPC11xx.h)(0x53208196)
+F (.\src\main.c)(0x564D3EE7)(-c --cpu Cortex-M0 -D__EVAL -g -O0 --apcs=interwork -I..\Template -I.\include-I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\CMSIS\Include-I C:\Keil_v5\ARM\Inc\NXP\LPC11xx-D__UVISION_VERSION="516"-o .\main.o --omf_browse .\main.crf --depend .\main.d)
+I (src\type.h)(0x4B82DB58)
+I (C:\Keil_v5\ARM\Inc\NXP\LPC11xx\LPC11xx.h)(0x53208196)
+I (C:\Keil_v5\ARM\CMSIS\Include\core_cm0.h)(0x5320840A)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x55AFBAD2)
-I (C:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h)(0x559DB078)
-I (C:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h)(0x559DB078)
-I (C:\Keil_v5\ARM\Inc\NXP\LPC11xx\system_LPC11xx.h)(0x559DA688)
+I (C:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h)(0x5320840A)
+I (C:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h)(0x5320840A)
+I (C:\Keil_v5\ARM\Inc\NXP\LPC11xx\system_LPC11xx.h)(0x53208196)
+I (src\uart.h)(0x4B82DB58)
+I (src\gpio.h)(0x5457F596)
+F (.\src\gpio.c)(0x4B82DB58)(-c --cpu Cortex-M0 -D__EVAL -g -O0 --apcs=interwork -I..\Template -I.\include-I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\CMSIS\Include-I C:\Keil_v5\ARM\Inc\NXP\LPC11xx-D__UVISION_VERSION="516"-o .\gpio.o --omf_browse .\gpio.crf --depend .\gpio.d)
+I (src\mcu_regs.h)(0x4B82DB58)
+I (C:\Keil_v5\ARM\Inc\NXP\LPC11xx\lpc11xx.h)(0x53208196)
+I (C:\Keil_v5\ARM\CMSIS\Include\core_cm0.h)(0x5320840A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x55AFBAD2)
+I (C:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h)(0x5320840A)
+I (C:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h)(0x5320840A)
+I (C:\Keil_v5\ARM\Inc\NXP\LPC11xx\system_LPC11xx.h)(0x53208196)
+I (src\gpio.h)(0x5457F596)
+F (.\src\uart.c)(0x564D3876)(-c --cpu Cortex-M0 -D__EVAL -g -O0 --apcs=interwork -I..\Template -I.\include-I C:\Keil_v5\ARM\RV31\INC-I C:\Keil_v5\ARM\CMSIS\Include-I C:\Keil_v5\ARM\Inc\NXP\LPC11xx-D__UVISION_VERSION="516"-o .\uart.o --omf_browse .\uart.crf --depend .\uart.d)
+I (src\mcu_regs.h)(0x4B82DB58)
+I (C:\Keil_v5\ARM\Inc\NXP\LPC11xx\lpc11xx.h)(0x53208196)
+I (C:\Keil_v5\ARM\CMSIS\Include\core_cm0.h)(0x5320840A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x55AFBAD2)
+I (C:\Keil_v5\ARM\CMSIS\Include\core_cmInstr.h)(0x5320840A)
+I (C:\Keil_v5\ARM\CMSIS\Include\core_cmFunc.h)(0x5320840A)
+I (C:\Keil_v5\ARM\Inc\NXP\LPC11xx\system_LPC11xx.h)(0x53208196)
+I (src\uart.h)(0x4B82DB58)

@@ -2,7 +2,10 @@
 // Eduardo Corpeño
 // Universidad Galileo, FISICC
 
+#include "type.h"
 #include "LPC11xx.h"
+#include "uart.h"
+#include "gpio.h"
 
 #define MASK(x) (1UL << (x))
 //Frecuencias base para tonos naturales
@@ -99,6 +102,12 @@ int main()
 	LPC_GPIO0->DIR &= ~MASK(2);
 	
 
+	GPIOInit();
+ 
+
+		delay(6000000);
+    UARTInit(9600);
+    UARTSendString((uint8_t*)"TOC TOC QUE CUAAAAA?");
 	while(1)
 	{
 		/*if (play)
