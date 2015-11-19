@@ -61,8 +61,8 @@
 
 static const double natural_tones[] = {TONE_C1, TONE_D1, TONE_E1, TONE_F1, TONE_G1, TONE_A1, TONE_B1};
 static const double sharp_tones[] = {TONE_C1_SHARP, TONE_D1_SHARP, TONE_E1_SHARP, TONE_F1_SHARP, TONE_G1_SHARP, TONE_A1_SHARP, TONE_B1_SHARP};
-static const char* natural_note_names[] = {"DO", "RE", "MI", "FA", "SOL", "LA", "SI"}; 
-static const char* sharp_note_names[] = {"DO#", "RE#", "FA", "FA#", "SOL#", "LA#", "DO+"}; 
+static const char* natural_note_names[] = {"DO",  "RE",  "MI", "FA",  "SOL",  "LA",  "SI"}; 
+static const char* sharp_note_names[] =   {"DO#", "RE#", "FA", "FA#", "SOL#", "LA#", "DO+"}; 
 static uint8_t special_pos_char[] = {254};
 static uint8_t special_line1_char[] = {128};
 static uint8_t special_line2_char[] = {192};
@@ -216,8 +216,10 @@ void setRows(int currRow){
 	}
 }
 
-void checkCols(){
-	if(col1){
+void checkCols()
+{
+	if(col1)
+	{
 		if(row3 || row2 || row1)
 		{ 
 			delay(1000000);
@@ -228,12 +230,15 @@ void checkCols(){
 			if (octave == 0) octave = 5;
 			delay(1000000);
 		}
-	} else if(col2){
+	} 
+	else if(col2)
+	{
 		if(row3 || row2 || row1 || row4)
 		{ 
 			delay(1000000);
 		}
-	} else if(col3)
+	}
+	else if(col3)
 	{		
 		if(row3 || row2 || row1)
 		{ 
