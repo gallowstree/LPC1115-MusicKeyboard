@@ -68,14 +68,37 @@ static uint8_t special_line1_char[] = {128};
 static uint8_t special_line2_char[] = {192};
 
 int numRow = 1;
+int lastNote = -2;
+int wasSharp = 0;
 char octave = 4;
-
-
 
 void initPins()
 {
 	LPC_SYSCON->SYSAHBCLKCTRL |= (MASK(6) | MASK(16)); //reloj a GPIO e IOCON
 	LPC_IOCON->R_PIO1_1 |= (MASK(0) | MASK(1)); //R_PIO1_1 FUNC bits en 0x3,  CT32B1_MAT0
+
+	//entradas push buttons
+	LPC_GPIO0->DIR &= ~MASK(8);
+	LPC_GPIO0->DIR &= ~MASK(10);
+	LPC_GPIO0->DIR &= ~MASK(11);
+	LPC_GPIO0->DIR &= ~MASK(6);
+	LPC_GPIO0->DIR &= ~MASK(2);
+	LPC_GPIO0->DIR &= ~MASK(3);
+	LPC_GPIO0->DIR &= ~MASK(7);
+	LPC_GPIO0->DIR &= ~MASK(9);
+	
+	//Modo GPIO
+	LPC_IOCON->SWDIO_PIO1_3 = (LPC_IOCON->SWDIO_PIO1_3 & ~0x7) | 0x1;
+	
+	//salidas del teclado matricial
+	LPC_GPIO0->DIR |= MASK(5);
+	LPC_GPIO1->DIR |= MASK(3);
+	LPC_GPIO1->DIR |= MASK(5);
+	LPC_GPIO1->DIR |= MASK(9);
+	//entradas del teclado matricial
+	LPC_GPIO1->DIR &= ~MASK(2);
+	LPC_GPIO1->DIR &= ~MASK(4);
+	LPC_GPIO1->DIR &= ~MASK(8);
 }
 
 void initPWM()
@@ -91,6 +114,7 @@ void initPWM()
 
 void clearScreen()
 {
+	//32 blanks
 	UARTSendString((uint8_t*)"                                ");
 }
 
@@ -118,7 +142,7 @@ void STFU()
 {
 	LPC_TMR32B1->TCR &= ~MASK(0); //Detener cuenta	
 	LPC_TMR32B1->MR3 = 0; //hacer match freq veces por segundo
-	LPC_TMR32B1->MR0 = 1000; //duty cycle del 50%  
+	LPC_TMR32B1->MR0 = 1000; 
 	LPC_TMR32B1->TC = 0; //Contador en 0
 	LPC_TMR32B1->TCR |= MASK(0); //Iniciar cuenta	
 }
@@ -133,8 +157,7 @@ int round_(double d)
 	return (int)(d < 0 ? (d - 0.5) : (d + 0.5));
 }
 
-int lastNote = -2;
-int wasSharp = 0;
+
 int get_frequency()
 {
 	const double* selected_tones = KEY_SHARP_DOWN ? sharp_tones : natural_tones;
@@ -235,57 +258,28 @@ void readNumKeypad()
 
 void showSplashScreen()
 {
-	UARTSendString((uint8_t*)"A CLOCKWORK     KEYBOARD");
-	delay(7000000);
-	clearScreen();
-	UARTSend(special_pos_char, 1);
-	UARTSend(special_line1_char, 1);
-	UARTSendString((uint8_t*)"DANIEL RODRIGUEZ");
-	delay(7000000);
-	clearScreen();
-	UARTSend(special_pos_char, 1);
-	UARTSend(special_line1_char, 1);
-	UARTSendString((uint8_t*)"PAOLO SOLOMBRINO");
-	delay(7000000);
-	clearScreen();
-	UARTSend(special_pos_char, 1);
-	UARTSend(special_line1_char, 1);
-	UARTSendString((uint8_t*)"ALEJANDRO       ALVARADO");
-	delay(7000000);
-	clearScreen();
+	int i = 0;
+	char* names[] = {"A CLOCKWORK     KEYBOARD", "DANIEL RODRIGUEZ", "PAOLO SOLOMBRINO", "ALEJANDRO       ALVARADO"};
+	
+	for (; i < 4;i++)
+	{
+		UARTSend(special_pos_char, 1);
+		UARTSend(special_line1_char, 1);
+		UARTSendString((uint8_t*)names[i]);
+		delay(7000000);
+		clearScreen();	
+	}		
 }
 
 int main()
 {	
 	initPins();
 	initPWM();
-	
-	LPC_GPIO0->DIR &= ~MASK(8);
-	LPC_GPIO0->DIR &= ~MASK(10);
-	LPC_GPIO0->DIR &= ~MASK(11);
-	LPC_GPIO0->DIR &= ~MASK(6);
-	LPC_GPIO0->DIR &= ~MASK(2);
-	LPC_GPIO0->DIR &= ~MASK(3);
-	LPC_GPIO0->DIR &= ~MASK(7);
-	LPC_GPIO0->DIR &= ~MASK(9);
-	
-	LPC_IOCON->SWDIO_PIO1_3 = (LPC_IOCON->SWDIO_PIO1_3 & ~0x7) | 0x1;
-	
-	//salidas del teclado matricial
-	LPC_GPIO0->DIR |= MASK(5);
-	LPC_GPIO1->DIR |= MASK(3);
-	LPC_GPIO1->DIR |= MASK(5);
-	LPC_GPIO1->DIR |= MASK(9);
-	//entradas del teclado matricial
-	LPC_GPIO1->DIR &= ~MASK(2);
-	LPC_GPIO1->DIR &= ~MASK(4);
-	LPC_GPIO1->DIR &= ~MASK(8);
-	
+		
+	//Delay para que juncione la pantalla ~500ms
 	delay(9000000);
-	GPIOInit(); 
-	
+	GPIOInit(); 	
   	UARTInit(9600);
-
 	showSplashScreen();
 
 	while(1)
