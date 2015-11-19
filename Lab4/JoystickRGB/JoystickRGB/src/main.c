@@ -59,18 +59,18 @@
 #define col3 !(LPC_GPIO1->DATA & MASK(8))
 
 
-static const double natural_tones[] = {TONE_C1, TONE_D1, TONE_E1, TONE_F1, TONE_G1, TONE_A1, TONE_B1};
-static const double sharp_tones[] = {TONE_C1_SHARP, TONE_D1_SHARP, TONE_E1_SHARP, TONE_F1_SHARP, TONE_G1_SHARP, TONE_A1_SHARP, TONE_B1_SHARP};
-static const char* natural_note_names[] = {"DO",  "RE",  "MI", "FA",  "SOL",  "LA",  "SI"}; 
-static const char* sharp_note_names[] =   {"DO#", "RE#", "FA", "FA#", "SOL#", "LA#", "DO+"}; 
-static uint8_t special_pos_char[] = {254};
-static uint8_t special_line1_char[] = {128};
-static uint8_t special_line2_char[] = {192};
+const double natural_tones[] = {TONE_C1, TONE_D1, TONE_E1, TONE_F1, TONE_G1, TONE_A1, TONE_B1};
+const double sharp_tones[] = {TONE_C1_SHARP, TONE_D1_SHARP, TONE_E1_SHARP, TONE_F1_SHARP, TONE_G1_SHARP, TONE_A1_SHARP, TONE_B1_SHARP};
+const char* natural_note_names[] = {"DO",  "RE",  "MI", "FA",  "SOL",  "LA",  "SI"}; 
+const char* sharp_note_names[] =   {"DO#", "RE#", "FA", "FA#", "SOL#", "LA#", "DO+"}; 
+uint8_t special_pos_char[] = {254};
+uint8_t special_line1_char[] = {128};
+uint8_t special_line2_char[] = {192};
 
 int numRow = 1;
 int lastNote = -2;
 int wasSharp = 0;
-char octave = 4;
+char octave = 3;
 
 void initPins()
 {
@@ -141,7 +141,7 @@ void setFrequency(int freq)
 void STFU()
 {
 	LPC_TMR32B1->TCR &= ~MASK(0); //Detener cuenta	
-	LPC_TMR32B1->MR3 = 0; //hacer match freq veces por segundo
+	LPC_TMR32B1->MR3 = 0; //hacer match 0 veces por segundo
 	LPC_TMR32B1->MR0 = 1000; 
 	LPC_TMR32B1->TC = 0; //Contador en 0
 	LPC_TMR32B1->TCR |= MASK(0); //Iniciar cuenta	
@@ -297,12 +297,12 @@ int main()
 			setFrequency(freq);
 		while (faux == freq)
 		{				
-				faux = get_frequency();
-				readNumKeypad();			
+			faux = get_frequency();
+			readNumKeypad();			
 		}
 		STFU();
 		readNumKeypad();		
 	}
 
 }
-// *******************************ARM University Program Copyright © ARM Ltd 2013*************************************   
+
