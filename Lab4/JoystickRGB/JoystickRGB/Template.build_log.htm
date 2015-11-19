@@ -22,26 +22,26 @@ Dialog DLL:      TARMCM1.DLL V1.9.0.0
  
 <h2>Project:</h2>
 C:\Users\vash\Desktop\Proyecto-Micro\LPC1115-MusicKeyboard\Lab4\JoystickRGB\JoystickRGB\Template.uvproj
-Project File Date:  11/18/2015
+Project File Date:  11/19/2015
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 (build 20)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Rebuild target 'JoystickRGB'
 assembling startup_LPC11xx.s...
-compiling main.c...
-src\main.c(98): warning:  #177-D: variable "play" was declared but never referenced
-  	int play = 0;
-src\main.c(40): warning:  #177-D: variable "sharp_tones" was declared but never referenced
-  static const double sharp_tones[] = {TONE_C1_SHARP, TONE_D1_SHARP, TONE_E1_SHARP, TONE_F1_SHARP, TONE_G1_SHARP, TONE_A1_SHARP, TONE_B1_SHARP};
-src\main.c: 2 warnings, 0 errors
 compiling system_LPC11xx.c...
 compiling uart.c...
+compiling main.c...
+src\main.c(194): warning:  #177-D: variable "play" was declared but never referenced
+  	int play = 0;
+src\main.c(55): warning:  #177-D: variable "sharp_tones" was declared but never referenced
+  static const double sharp_tones[] = {TONE_C1_SHARP, TONE_D1_SHARP, TONE_E1_SHARP, TONE_F1_SHARP, TONE_G1_SHARP, TONE_A1_SHARP, TONE_B1_SHARP};
+src\main.c: 2 warnings, 0 errors
 compiling gpio.c...
 linking...
-Program Size: Code=5840 RO-data=336 RW-data=4 ZI-data=612  
+Program Size: Code=6672 RO-data=336 RW-data=20 ZI-data=612  
 FromELF: creating hex file...
 ".\Template.axf" - 0 Error(s), 2 Warning(s).
-Build Time Elapsed:  00:00:02
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>

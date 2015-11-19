@@ -284,7 +284,7 @@ int main()
 	delay(9000000);
 	GPIOInit(); 
 	
-  UARTInit(9600);
+  	UARTInit(9600);
 
 	showSplashScreen();
 
