@@ -58,24 +58,52 @@
 #define col2 !(LPC_GPIO1->DATA & MASK(2))
 #define col3 !(LPC_GPIO1->DATA & MASK(8))
 
+#define RECORD_LENGTH 100
 
-static const double natural_tones[] = {TONE_C1, TONE_D1, TONE_E1, TONE_F1, TONE_G1, TONE_A1, TONE_B1};
-static const double sharp_tones[] = {TONE_C1_SHARP, TONE_D1_SHARP, TONE_E1_SHARP, TONE_F1_SHARP, TONE_G1_SHARP, TONE_A1_SHARP, TONE_B1_SHARP};
-static const char* natural_note_names[] = {"DO", "RE", "MI", "FA", "SOL", "LA", "SI"}; 
-static const char* sharp_note_names[] = {"DO#", "RE#", "FA", "FA#", "SOL#", "LA#", "DO+"}; 
-static uint8_t special_pos_char[] = {254};
-static uint8_t special_line1_char[] = {128};
-static uint8_t special_line2_char[] = {192};
+const double natural_tones[] = {TONE_C1, TONE_D1, TONE_E1, TONE_F1, TONE_G1, TONE_A1, TONE_B1};
+const double sharp_tones[] = {TONE_C1_SHARP, TONE_D1_SHARP, TONE_E1_SHARP, TONE_F1_SHARP, TONE_G1_SHARP, TONE_A1_SHARP, TONE_B1_SHARP};
+const char* natural_note_names[] = {"DO",  "RE",  "MI", "FA",  "SOL",  "LA",  "SI"}; 
+const char* sharp_note_names[] =   {"DO#", "RE#", "FA", "FA#", "SOL#", "LA#", "DO+"}; 
+uint8_t special_pos_char[] = {254};
+uint8_t special_line1_char[] = {128};
+uint8_t special_line2_char[] = {192};
+
+int recordedFreqs[RECORD_LENGTH];
+int recordedDurations[RECORD_LENGTH];
 
 int numRow = 1;
-char octave = 4;
-
-
+int lastNote = -2;
+int wasSharp = 0;
+int recording = 0;
+char octave = 3;
 
 void initPins()
 {
 	LPC_SYSCON->SYSAHBCLKCTRL |= (MASK(6) | MASK(16)); //reloj a GPIO e IOCON
 	LPC_IOCON->R_PIO1_1 |= (MASK(0) | MASK(1)); //R_PIO1_1 FUNC bits en 0x3,  CT32B1_MAT0
+
+	//entradas push buttons
+	LPC_GPIO0->DIR &= ~MASK(8);
+	LPC_GPIO0->DIR &= ~MASK(10);
+	LPC_GPIO0->DIR &= ~MASK(11);
+	LPC_GPIO0->DIR &= ~MASK(6);
+	LPC_GPIO0->DIR &= ~MASK(2);
+	LPC_GPIO0->DIR &= ~MASK(3);
+	LPC_GPIO0->DIR &= ~MASK(7);
+	LPC_GPIO0->DIR &= ~MASK(9);
+	
+	//Modo GPIO
+	LPC_IOCON->SWDIO_PIO1_3 = (LPC_IOCON->SWDIO_PIO1_3 & ~0x7) | 0x1;
+	
+	//salidas del teclado matricial
+	LPC_GPIO0->DIR |= MASK(5);
+	LPC_GPIO1->DIR |= MASK(3);
+	LPC_GPIO1->DIR |= MASK(5);
+	LPC_GPIO1->DIR |= MASK(9);
+	//entradas del teclado matricial
+	LPC_GPIO1->DIR &= ~MASK(2);
+	LPC_GPIO1->DIR &= ~MASK(4);
+	LPC_GPIO1->DIR &= ~MASK(8);
 }
 
 void initPWM()
@@ -91,12 +119,13 @@ void initPWM()
 
 void clearScreen()
 {
+	//32 blanks
 	UARTSendString((uint8_t*)"                                ");
 }
 
 void printOctave()
 {
-	uint8_t oct[1];	
+	uint8_t oct[1];		
 	UARTSend(special_pos_char, 1);
 	UARTSend(special_line2_char, 1);
 	UARTSendString((uint8_t*)"OCTAVA: ");
@@ -117,8 +146,8 @@ void setFrequency(int freq)
 void STFU()
 {
 	LPC_TMR32B1->TCR &= ~MASK(0); //Detener cuenta	
-	LPC_TMR32B1->MR3 = 0; //hacer match freq veces por segundo
-	LPC_TMR32B1->MR0 = 1000; //duty cycle del 50%  
+	LPC_TMR32B1->MR3 = 0; //hacer match 0 veces por segundo
+	LPC_TMR32B1->MR0 = 1000; 
 	LPC_TMR32B1->TC = 0; //Contador en 0
 	LPC_TMR32B1->TCR |= MASK(0); //Iniciar cuenta	
 }
@@ -133,8 +162,7 @@ int round_(double d)
 	return (int)(d < 0 ? (d - 0.5) : (d + 0.5));
 }
 
-int lastNote = -2;
-int wasSharp = 0;
+
 int get_frequency()
 {
 	const double* selected_tones = KEY_SHARP_DOWN ? sharp_tones : natural_tones;
@@ -193,34 +221,39 @@ void setRows(int currRow){
 	}
 }
 
-void checkCols(){
-	if(col1){
+void checkCols()
+{
+	if(col1)
+	{
 		if(row3 || row2 || row1)
 		{ 
-			delay(1000000);
+			delay(10000);
 		}
 		if(row4)
 		{ 
 			octave--;
 			if (octave == 0) octave = 5;
-			delay(1000000);
+			delay(10000);
 		}
-	} else if(col2){
+	} 
+	else if(col2)
+	{
 		if(row3 || row2 || row1 || row4)
 		{ 
-			delay(1000000);
+			delay(10000);
 		}
-	} else if(col3)
+	}
+	else if(col3)
 	{		
 		if(row3 || row2 || row1)
 		{ 
-			delay(1000000);
+			delay(10000);
 		}
 		if(row4)
 		{ 			
 			octave++;
 			if (octave == 6) octave = 1;
-			delay(1000000);
+			delay(10000);
 		}
 	}
 }
@@ -233,60 +266,52 @@ void readNumKeypad()
 		checkCols();
 }
 
+void startRecording()
+{
+	int i = 0;
+	for (; i < RECORD_LENGTH; i++)
+	{
+		recordedDurations[i] = -1;
+		recordedFreqs[i] = -1;
+	}
+	SysTick->CTRL |= (MASK(0) | MASK(1) | MASK(2));
+	SysTick_Config(SystemCoreClock*2);
+	recording = 1;
+}
+
+void endRecording()
+{
+	recording = 0;
+	SysTick->CTRL &= (~MASK(0) & ~MASK(1));
+}
+
 void showSplashScreen()
 {
-	UARTSendString((uint8_t*)"A CLOCKWORK     KEYBOARD");
-	delay(7000000);
-	clearScreen();
-	UARTSend(special_pos_char, 1);
-	UARTSend(special_line1_char, 1);
-	UARTSendString((uint8_t*)"DANIEL RODRIGUEZ");
-	delay(7000000);
-	clearScreen();
-	UARTSend(special_pos_char, 1);
-	UARTSend(special_line1_char, 1);
-	UARTSendString((uint8_t*)"PAOLO SOLOMBRINO");
-	delay(7000000);
-	clearScreen();
-	UARTSend(special_pos_char, 1);
-	UARTSend(special_line1_char, 1);
-	UARTSendString((uint8_t*)"ALEJANDRO       ALVARADO");
-	delay(7000000);
-	clearScreen();
+	int i = 0;
+	char* names[] = {"A CLOCKWORK     KEYBOARD", "DANIEL RODRIGUEZ", "PAOLO SOLOMBRINO", "ALEJANDRO       ALVARADO"};
+	
+	for (; i < 4;i++)
+	{
+		UARTSend(special_pos_char, 1);
+		UARTSend(special_line1_char, 1);
+		UARTSendString((uint8_t*)names[i]);
+		delay(7000000);
+		clearScreen();	
+	}		
 }
+
 
 int main()
 {	
 	initPins();
 	initPWM();
-	
-	LPC_GPIO0->DIR &= ~MASK(8);
-	LPC_GPIO0->DIR &= ~MASK(10);
-	LPC_GPIO0->DIR &= ~MASK(11);
-	LPC_GPIO0->DIR &= ~MASK(6);
-	LPC_GPIO0->DIR &= ~MASK(2);
-	LPC_GPIO0->DIR &= ~MASK(3);
-	LPC_GPIO0->DIR &= ~MASK(7);
-	LPC_GPIO0->DIR &= ~MASK(9);
-	
-	LPC_IOCON->SWDIO_PIO1_3 = (LPC_IOCON->SWDIO_PIO1_3 & ~0x7) | 0x1;
-	
-	//salidas del teclado matricial
-	LPC_GPIO0->DIR |= MASK(5);
-	LPC_GPIO1->DIR |= MASK(3);
-	LPC_GPIO1->DIR |= MASK(5);
-	LPC_GPIO1->DIR |= MASK(9);
-	//entradas del teclado matricial
-	LPC_GPIO1->DIR &= ~MASK(2);
-	LPC_GPIO1->DIR &= ~MASK(4);
-	LPC_GPIO1->DIR &= ~MASK(8);
-	
+		
+	//Delay para que juncione la pantalla ~500ms
 	delay(9000000);
-	GPIOInit(); 
-	
-  	UARTInit(9600);
-
+	GPIOInit(); 	
+  UARTInit(9600);
 	showSplashScreen();
+	
 
 	while(1)
 	{
@@ -298,12 +323,16 @@ int main()
 			setFrequency(freq);
 		while (faux == freq)
 		{				
-				faux = get_frequency();
-				readNumKeypad();			
+			faux = get_frequency();
+			readNumKeypad();			
 		}
 		STFU();
 		readNumKeypad();		
 	}
 
 }
-// *******************************ARM University Program Copyright © ARM Ltd 2013*************************************   
+
+void SysTick_Handler(void) 
+{
+
+}
